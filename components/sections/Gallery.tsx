@@ -1,29 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { ExternalLink, X } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import Image from "next/image";
 import { GALLERY, GALLERY_CATEGORIES, type GalleryCategory } from "@/constants/site";
 
 export function Gallery() {
   const [cat, setCat] = useState<GalleryCategory>("All");
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const items = useMemo(() => {
     if (cat === "All") return GALLERY;
     return GALLERY.filter((g) => g.categories.includes(cat));
   }, [cat]);
-
-  const getOfficeViewerUrl = (href: string) => {
-    const origin =
-      typeof window !== "undefined"
-        ? window.location.origin
-        : process.env.NEXT_PUBLIC_SITE_URL ?? "";
-    const absoluteUrl = href.startsWith("http") ? href : `${origin}${href}`;
-    return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-      absoluteUrl
-    )}`;
-  };
 
   return (
     <section id="gallery" className="section bg-surface">
@@ -61,19 +49,25 @@ export function Gallery() {
           })}
         </div>
 
-        <motion.div
-          key={cat}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
-        >
+        <div key={cat} className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {items.map((g) => (
             <article
               key={g.id}
               className="group relative overflow-hidden rounded-xl border border-border bg-surface2"
             >
-              <div className="aspect-[16/10] bg-[radial-gradient(900px_520px_at_35%_15%,rgba(0,194,255,0.12),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.04),transparent)]" />
+              <div className="aspect-[16/10] overflow-hidden border-b border-border">
+                {g.previewImage ? (
+                  <Image
+                    src={g.previewImage}
+                    alt={`${g.title} のプレビュー`}
+                    width={1600}
+                    height={900}
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-[radial-gradient(900px_520px_at_35%_15%,rgba(0,194,255,0.12),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.04),transparent)]" />
+                )}
+              </div>
 
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                 <div className="absolute inset-0 bg-bg opacity-40" />
@@ -115,16 +109,14 @@ export function Gallery() {
                 {g.href ? (
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     {g.href.endsWith(".pptx") ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!g.href) return;
-                          setPreviewUrl(getOfficeViewerUrl(g.href));
-                        }}
+                      <a
+                        href="/works/AI_Services_Slides.pdf"
+                        target="_blank"
+                        rel="noreferrer"
                         className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
                       >
                         サイト内でスライドを見る <ExternalLink className="h-4 w-4" />
-                      </button>
+                      </a>
                     ) : null}
                     <a
                       href={g.href}
@@ -132,40 +124,16 @@ export function Gallery() {
                       rel="noreferrer"
                       className="inline-flex items-center gap-1 text-sm font-semibold text-muted hover:text-white transition focus-ring rounded-sm"
                     >
-                      ファイルを開く <ExternalLink className="h-4 w-4" />
+                      ファイルを開く（DL）{" "}
+                      <ExternalLink className="h-4 w-4" />
                     </a>
                   </div>
                 ) : null}
               </div>
             </article>
           ))}
-        </motion.div>
-      </div>
-
-      {previewUrl ? (
-        <div className="fixed inset-0 z-[80] bg-black/70 p-4 md:p-8">
-          <div className="mx-auto h-full w-full max-w-6xl rounded-xl border border-border bg-surface2 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
-              <h3 className="text-sm md:text-base text-white font-semibold">
-                AIスライド実例プレビュー
-              </h3>
-              <button
-                type="button"
-                onClick={() => setPreviewUrl(null)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted hover:text-white transition focus-ring"
-                aria-label="プレビューを閉じる"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <iframe
-              title="AIスライド実例"
-              src={previewUrl}
-              className="h-[calc(100%-57px)] w-full rounded-b-xl bg-black"
-            />
-          </div>
         </div>
-      ) : null}
+      </div>
     </section>
   );
 }

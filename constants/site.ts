@@ -32,6 +32,7 @@ export type GalleryItem = {
   categories: GalleryCategory[];
   tech: string[];
   href?: string;
+  previewImage?: string;
 };
 
 export type Testimonial = {
@@ -149,7 +150,8 @@ export const GALLERY: GalleryItem[] = [
       "実際にAIで作成した提案スライドです。テキスト入力から構成・デザイン反映までの成果物をそのまま確認できます。",
     categories: ["All", "Consulting", "Automation"],
     tech: ["PowerPoint", "LLM", "Slides Automation"],
-    href: "/works/AI_Services_Slides_v4.pptx"
+    href: "/works/AI_Services_Slides_v4.pptx",
+    previewImage: "/works/AI_Services_Slides_v4.pptx.png"
   },
   {
     id: "g2",
