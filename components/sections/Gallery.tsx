@@ -117,7 +117,10 @@ export function Gallery() {
                     {g.href.endsWith(".pptx") ? (
                       <button
                         type="button"
-                        onClick={() => setPreviewUrl(getOfficeViewerUrl(g.href))}
+                        onClick={() => {
+                          if (!g.href) return;
+                          setPreviewUrl(getOfficeViewerUrl(g.href));
+                        }}
                         className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
                       >
                         サイト内でスライドを見る <ExternalLink className="h-4 w-4" />
