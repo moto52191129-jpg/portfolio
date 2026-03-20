@@ -56,14 +56,41 @@ export function Gallery() {
               className="group relative overflow-hidden rounded-xl border border-border bg-surface2"
             >
               <div className="aspect-[16/10] overflow-hidden border-b border-border">
-                {g.previewImage ? (
-                  <Image
-                    src={g.previewImage}
-                    alt={`${g.title} のプレビュー`}
-                    width={1600}
-                    height={900}
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                  />
+                {g.previewPdf ? (
+                  <object
+                    data={`${g.previewPdf}#page=1&view=FitH`}
+                    type="application/pdf"
+                    className="h-full w-full"
+                    aria-label={`${g.title} のPDFプレビュー`}
+                  >
+                    <a
+                      href={g.previewPdf}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex h-full w-full items-center justify-center text-sm text-primary underline"
+                    >
+                      PDFプレビューを開く
+                    </a>
+                  </object>
+                ) : g.previewImage ? (
+                  g.previewImage.toLowerCase().endsWith(".svg") ? (
+                    // SVGのプレビューは next/image が最適化できないため、通常の img で描画します
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={g.previewImage}
+                      alt={`${g.title} のプレビュー`}
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Image
+                      src={g.previewImage}
+                      alt={`${g.title} のプレビュー`}
+                      width={1600}
+                      height={900}
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                    />
+                  )
                 ) : (
                   <div className="h-full w-full bg-[radial-gradient(900px_520px_at_35%_15%,rgba(0,194,255,0.12),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.04),transparent)]" />
                 )}

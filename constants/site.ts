@@ -33,6 +33,7 @@ export type GalleryItem = {
   tech: string[];
   href?: string;
   previewImage?: string;
+  previewPdf?: string;
 };
 
 export type Testimonial = {
@@ -156,10 +157,12 @@ export const GALLERY: GalleryItem[] = [
   {
     id: "g2",
     title: "業務フロー図解ジェネレーター",
-    description: "業務手順を入力すると、分かりやすいフロー図を自動生成（PNG/SVG）。",
+    description:
+      "業務手順を入力すると、分かりやすいフロー図を自動生成します（PNG/SVG/PDF）。デモ成果物のPDFを確認できます。",
     categories: ["All", "Automation", "Consulting"],
-    tech: ["Figma", "SVG", "LLM"],
-    href: "#contact"
+    tech: ["Figma", "SVG", "PDF", "LLM"],
+    href: "/works/diagram_merit.pdf",
+    previewPdf: "/works/diagram_merit.pdf"
   },
   {
     id: "g3",
