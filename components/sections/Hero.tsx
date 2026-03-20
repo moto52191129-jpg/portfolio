@@ -62,7 +62,7 @@ export function Hero() {
 
       <div className="relative container-app pt-24 md:pt-28 pb-16">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-3xl"

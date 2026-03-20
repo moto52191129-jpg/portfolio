@@ -79,6 +79,8 @@ export function Gallery() {
                   {g.href ? (
                     <a
                       href={g.href}
+                      target="_blank"
+                      rel="noreferrer"
                       className="shrink-0 inline-flex items-center justify-center rounded-[4px] border border-primaryGlow bg-primaryGlow p-2 text-primary hover:bg-primaryGlow transition focus-ring"
                       aria-label="デモを見る"
                     >
@@ -97,6 +99,17 @@ export function Gallery() {
                     </span>
                   ))}
                 </div>
+
+                {g.href ? (
+                  <a
+                    href={g.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
+                  >
+                    実例スライドを見る <ExternalLink className="h-4 w-4" />
+                  </a>
+                ) : null}
               </div>
             </article>
           ))}

@@ -144,11 +144,12 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
 export const GALLERY: GalleryItem[] = [
   {
     id: "g1",
-    title: "AI提案スライド・デモ",
-    description: "入力テキストからストーリー設計→デザイン済みスライド生成までのサンプル。",
+    title: "AI提案スライド・実例（v4）",
+    description:
+      "実際にAIで作成した提案スライドです。テキスト入力から構成・デザイン反映までの成果物をそのまま確認できます。",
     categories: ["All", "Consulting", "Automation"],
-    tech: ["Next.js", "LLM", "Slides API"],
-    href: "#contact"
+    tech: ["PowerPoint", "LLM", "Slides Automation"],
+    href: "/works/AI_Services_Slides_v4.pptx"
   },
   {
     id: "g2",

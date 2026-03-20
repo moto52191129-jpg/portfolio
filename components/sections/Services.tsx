@@ -41,7 +41,7 @@ export function Services() {
         </div>
 
         <motion.div
-          initial="hidden"
+          initial="show"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
           variants={{
@@ -54,7 +54,7 @@ export function Services() {
             <motion.article
               key={s.id}
               variants={{
-                hidden: { opacity: 0, y: 40 },
+                hidden: { opacity: 1, y: 0 },
                 show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
               }}
               className="group relative overflow-hidden rounded-xl border border-border bg-surface2 p-6 transition will-change-transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,194,255,0.15)] hover:border-primary"

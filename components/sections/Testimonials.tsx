@@ -14,7 +14,7 @@ export function Testimonials() {
         </p>
 
         <motion.div
-          initial="hidden"
+          initial="show"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
@@ -24,7 +24,7 @@ export function Testimonials() {
             <motion.figure
               key={t.name + t.company}
               variants={{
-                hidden: { opacity: 0, y: 40 },
+                hidden: { opacity: 1, y: 0 },
                 show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
               }}
               className="card p-6"
