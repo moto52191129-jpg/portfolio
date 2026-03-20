@@ -2,16 +2,28 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import { GALLERY, GALLERY_CATEGORIES, type GalleryCategory } from "@/constants/site";
 
 export function Gallery() {
   const [cat, setCat] = useState<GalleryCategory>("All");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const items = useMemo(() => {
     if (cat === "All") return GALLERY;
     return GALLERY.filter((g) => g.categories.includes(cat));
   }, [cat]);
+
+  const getOfficeViewerUrl = (href: string) => {
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL ?? "";
+    const absoluteUrl = href.startsWith("http") ? href : `${origin}${href}`;
+    return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+      absoluteUrl
+    )}`;
+  };
 
   return (
     <section id="gallery" className="section bg-surface">
@@ -101,20 +113,56 @@ export function Gallery() {
                 </div>
 
                 {g.href ? (
-                  <a
-                    href={g.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
-                  >
-                    実例スライドを見る <ExternalLink className="h-4 w-4" />
-                  </a>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    {g.href.endsWith(".pptx") ? (
+                      <button
+                        type="button"
+                        onClick={() => setPreviewUrl(getOfficeViewerUrl(g.href))}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
+                      >
+                        サイト内でスライドを見る <ExternalLink className="h-4 w-4" />
+                      </button>
+                    ) : null}
+                    <a
+                      href={g.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-muted hover:text-white transition focus-ring rounded-sm"
+                    >
+                      ファイルを開く <ExternalLink className="h-4 w-4" />
+                    </a>
+                  </div>
                 ) : null}
               </div>
             </article>
           ))}
         </motion.div>
       </div>
+
+      {previewUrl ? (
+        <div className="fixed inset-0 z-[80] bg-black/70 p-4 md:p-8">
+          <div className="mx-auto h-full w-full max-w-6xl rounded-xl border border-border bg-surface2 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <h3 className="text-sm md:text-base text-white font-semibold">
+                AIスライド実例プレビュー
+              </h3>
+              <button
+                type="button"
+                onClick={() => setPreviewUrl(null)}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted hover:text-white transition focus-ring"
+                aria-label="プレビューを閉じる"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <iframe
+              title="AIスライド実例"
+              src={previewUrl}
+              className="h-[calc(100%-57px)] w-full rounded-b-xl bg-black"
+            />
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
