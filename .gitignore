@@ -9,5 +9,5 @@ node_modules
 
 # optional: keep secrets out of git by default
 .env
-Google API/
+google_api/
 

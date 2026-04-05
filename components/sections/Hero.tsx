@@ -114,7 +114,7 @@ export function Hero() {
 
 function TypewriterSubcopy() {
   const full =
-    "AIで業務を自動化し、あなたの時間を取り戻す。— [YOUR_NAME]";
+    "AIで業務を自動化し、あなたの時間を取り戻す。— 村上元春";
   const [text, setText] = useState("");
 
   useEffect(() => {

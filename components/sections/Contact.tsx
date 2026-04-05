@@ -2,20 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SITE } from "@/constants/site";
+import { contactPayloadSchema, type ContactPayload } from "@/lib/contact_schema";
 
-const contactSchema = z.object({
-  name: z.string().min(1, "お名前は必須です。"),
-  company: z.string().optional(),
-  email: z.string().email("メールアドレスの形式が正しくありません。"),
-  phone: z.string().optional(),
-  type: z.enum(["無料相談", "スライド自動生成", "図解デザイン生成", "電話営業自動化", "その他"]),
-  message: z.string().min(10, "内容は10文字以上で入力してください。")
-});
-
-type ContactValues = z.infer<typeof contactSchema>;
+type ContactValues = ContactPayload;
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -38,29 +29,26 @@ export function Contact() {
     formState: { errors, isSubmitting },
     reset
   } = useForm<ContactValues>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(contactPayloadSchema),
     mode: "onChange",
     defaultValues
   });
 
   const onSubmit = async (values: ContactValues) => {
-    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
     try {
-      if (endpoint) {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(values)
-        });
-        if (!res.ok) throw new Error("送信に失敗しました。");
-      } else {
-        await new Promise((r) => setTimeout(r, 650));
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(values)
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok) {
+        alert(data.error ?? "送信に失敗しました。時間をおいて再度お試しください。");
+        return;
       }
-
       setSubmitted(true);
       reset(defaultValues);
     } catch {
-      setSubmitted(false);
       alert("送信に失敗しました。時間をおいて再度お試しください。");
     }
   };
@@ -128,7 +116,7 @@ export function Contact() {
                   <option value="無料相談">無料相談</option>
                   <option value="スライド自動生成">スライド自動生成</option>
                   <option value="図解デザイン生成">図解デザイン生成</option>
-                  <option value="電話営業自動化">電話営業自動化</option>
+                  <option value="チャットbot付HP作成">チャットbot付HP作成</option>
                   <option value="その他">その他</option>
                 </select>
               </Field>
@@ -146,7 +134,7 @@ export function Contact() {
               </button>
 
               <p className="text-xs text-muted leading-relaxed">
-                ※ 送信先（Formspreeなど）は `NEXT_PUBLIC_FORMSPREE_ENDPOINT` で設定できます。未設定の場合はデモ挙動になります。
+                ※ 送信は Resend 経由です。`.env.local` に `RESEND_API_KEY` と `CONTACT_TO_EMAIL`（受信メール）を設定してください。
               </p>
             </form>
           </div>
@@ -155,18 +143,47 @@ export function Contact() {
             <div className="text-white font-semibold [font-family:var(--font-dm-sans)]">
               連絡先
             </div>
-            <div className="mt-4 space-y-2 text-sm text-white/80">
+            <div className="mt-4 space-y-3 text-sm text-white/80">
               <p>
-                <span className="text-muted">Email:</span> {SITE.contactEmail}
+                <span className="text-muted">Email:</span>{" "}
+                <a
+                  href={`mailto:${SITE.contactEmail}`}
+                  className="text-primary hover:opacity-90 transition break-all focus-ring rounded-sm"
+                >
+                  {SITE.contactEmail}
+                </a>
               </p>
               <p>
-                <span className="text-muted">X:</span> {SITE.sns.x}
+                <span className="text-muted">Tel:</span>{" "}
+                {(() => {
+                  const digits = SITE.contactTel.replace(/\D/g, "");
+                  if (!digits) {
+                    return <span>{SITE.contactTel}</span>;
+                  }
+                  return (
+                    <a
+                      href={`tel:${digits}`}
+                      className="text-primary hover:opacity-90 transition focus-ring rounded-sm"
+                    >
+                      {SITE.contactTel}
+                    </a>
+                  );
+                })()}
               </p>
               <p>
-                <span className="text-muted">GitHub:</span> {SITE.sns.github}
-              </p>
-              <p>
-                <span className="text-muted">LinkedIn:</span> {SITE.sns.linkedin}
+                <span className="text-muted">LINE:</span>{" "}
+                {SITE.lineUrl.startsWith("http") ? (
+                  <a
+                    href={SITE.lineUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-primary hover:opacity-90 transition break-all focus-ring rounded-sm"
+                  >
+                    友だち追加・トーク
+                  </a>
+                ) : (
+                  <span className="break-all">{SITE.lineUrl}</span>
+                )}
               </p>
             </div>
 

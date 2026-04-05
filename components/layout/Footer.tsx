@@ -18,9 +18,6 @@ export function Footer() {
             <a href="#services" className="text-muted hover:text-white transition focus-ring rounded-sm">
               サービス
             </a>
-            <a href="#cases" className="text-muted hover:text-white transition focus-ring rounded-sm">
-              事例
-            </a>
             <a href="#contact" className="text-muted hover:text-white transition focus-ring rounded-sm">
               お問い合わせ
             </a>

@@ -12,7 +12,7 @@ export default [
     ignores: [
       "**/.next/**",
       "node_modules/**",
-      "Google API/**",
+      "google_api/**",
       "next-env.d.ts",
       "postcss.config.mjs",
       "tailwind.config.ts",

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, Network, PhoneCall, Presentation } from "lucide-react";
+import { ArrowRight, Bot, Network, Presentation } from "lucide-react";
 import { SERVICES } from "@/constants/site";
 
 function ServiceIcon({ icon }: { icon: (typeof SERVICES)[number]["icon"] }) {
@@ -11,8 +11,6 @@ function ServiceIcon({ icon }: { icon: (typeof SERVICES)[number]["icon"] }) {
       return <Presentation className={common} />;
     case "diagram":
       return <Network className={common} />;
-    case "phone":
-      return <PhoneCall className={common} />;
     case "automation":
       return <Bot className={common} />;
   }
@@ -48,7 +46,7 @@ export function Services() {
             hidden: {},
             show: { transition: { staggerChildren: 0.1 } }
           }}
-          className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+          className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3"
         >
           {SERVICES.map((s) => (
             <motion.article

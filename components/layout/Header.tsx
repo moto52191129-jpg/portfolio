@@ -17,11 +17,7 @@ export function Header() {
   const navItems = useMemo<NavItem[]>(
     () => [
       { label: "サービス", href: "#services" },
-      { label: "実績", href: "#stats" },
-      { label: "事例", href: "#cases" },
-      { label: "制作実績", href: "#gallery" },
-      { label: "FAQ", href: "#faq" },
-      { label: "プロフィール", href: "#profile" }
+      { label: "制作実績", href: "#gallery" }
     ],
     []
   );

@@ -137,7 +137,7 @@ export function Gallery() {
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     {g.href.endsWith(".pptx") ? (
                       <a
-                        href="/works/AI_Services_Slides.pdf"
+                        href="/works/ai_services_slides.pdf"
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-90 transition focus-ring rounded-sm"
